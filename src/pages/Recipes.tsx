@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { Search, Plus, ChefHat } from 'lucide-react';
+import { Search, Plus, ChefHat, Filter } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { recipeApi, Recipe, RecipeResponse } from '@/services/recipeApi';
 import RecipeCard from '@/components/RecipeCard';
