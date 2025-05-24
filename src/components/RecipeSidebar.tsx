@@ -38,9 +38,9 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
     return (
       <Button
         onClick={onToggle}
-        className="fixed top-4 left-4 z-50 lg:hidden"
+        className="fixed top-6 left-6 z-50 lg:hidden form-button primary shadow-custom-lg"
         size="sm"
-        variant="outline"
+        aria-label="Open filters"
       >
         <Filter className="w-4 h-4" />
       </Button>
@@ -51,30 +51,34 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
     <>
       {/* Mobile overlay */}
       <div 
-        className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden animate-fade-in"
         onClick={onToggle}
+        aria-hidden="true"
       />
       
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-80 bg-white shadow-lg z-50 lg:relative lg:shadow-none lg:bg-transparent">
-        <Card className="h-full rounded-none lg:rounded-lg">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="w-5 h-5" />
+      <div className="fixed left-0 top-0 h-full w-80 bg-card/95 backdrop-blur-md shadow-custom-xl z-50 lg:relative lg:shadow-none lg:bg-transparent animate-slide-in-left lg:animate-none">
+        <Card className="h-full rounded-none lg:rounded-xl sidebar-glass border-border/50">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-card/50">
+            <CardTitle className="flex items-center gap-3 font-poppins">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Filter className="w-4 h-4 text-primary" />
+              </div>
               Filter by Tags
             </CardTitle>
             <Button
               onClick={onToggle}
               size="sm"
               variant="ghost"
-              className="lg:hidden"
+              className="lg:hidden focus-ring"
+              aria-label="Close filters"
             >
               <X className="w-4 h-4" />
             </Button>
           </CardHeader>
           
-          <CardContent className="p-4">
-            <div className="space-y-4">
+          <CardContent className="p-6 h-full overflow-hidden flex flex-col">
+            <div className="space-y-6 flex-1 overflow-hidden">
               {/* Clear filter button */}
               {selectedTag && (
                 <>
@@ -82,45 +86,56 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
                     onClick={() => onTagSelect(null)}
                     variant="outline"
                     size="sm"
-                    className="w-full"
+                    className="w-full form-button secondary"
                   >
+                    <X className="w-4 h-4 mr-2" />
                     Clear Filter
                   </Button>
-                  <Separator />
+                  <Separator className="bg-border/50" />
                 </>
               )}
 
               {/* Selected tag */}
               {selectedTag && (
-                <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">Active Filter:</p>
-                  <Badge variant="default" className="mb-4">
+                <div className="animate-fade-in">
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Active Filter:</p>
+                  <Badge variant="default" className="text-sm py-1.5 px-3 bg-primary text-primary-foreground">
                     {selectedTag}
                   </Badge>
                 </div>
               )}
 
               {/* Tags list */}
-              <div>
-                <p className="text-sm font-medium text-gray-700 mb-3">Available Tags:</p>
+              <div className="flex-1 overflow-hidden">
+                <p className="text-sm font-medium text-foreground mb-4">Available Tags:</p>
                 {loading ? (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {[...Array(10)].map((_, i) => (
-                      <div key={i} className="h-6 bg-gray-200 rounded animate-pulse" />
+                      <div key={i} className="h-10 skeleton-shimmer rounded-lg" />
                     ))}
                   </div>
                 ) : (
-                  <ScrollArea className="h-96">
+                  <ScrollArea className="h-full pr-4">
                     <div className="space-y-2">
-                      {tags.map((tag) => (
+                      {tags.map((tag, index) => (
                         <Button
                           key={tag}
                           onClick={() => onTagSelect(tag === selectedTag ? null : tag)}
                           variant={selectedTag === tag ? "default" : "ghost"}
                           size="sm"
-                          className="w-full justify-start text-left"
+                          className={`
+                            w-full justify-start text-left h-10 px-4 transition-all duration-200 animate-fade-in
+                            ${selectedTag === tag 
+                              ? 'bg-primary text-primary-foreground shadow-custom-sm' 
+                              : 'hover:bg-accent hover:text-accent-foreground interactive-element'
+                            }
+                          `}
+                          style={{ animationDelay: `${index * 20}ms` }}
                         >
-                          {tag}
+                          <span className="truncate">{tag}</span>
+                          {selectedTag === tag && (
+                            <div className="ml-auto w-2 h-2 rounded-full bg-primary-foreground" />
+                          )}
                         </Button>
                       ))}
                     </div>
