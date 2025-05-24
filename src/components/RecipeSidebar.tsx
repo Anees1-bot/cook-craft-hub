@@ -57,8 +57,8 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
       />
       
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-80 bg-card/95 backdrop-blur-md shadow-custom-xl z-50 lg:relative lg:shadow-none lg:bg-transparent animate-slide-in-left lg:animate-none">
-        <Card className="h-full rounded-none lg:rounded-xl sidebar-glass border-border/50">
+      <div className="fixed left-0 top-0 h-full w-80 bg-card/95 backdrop-blur-md shadow-custom-xl z-50 lg:relative lg:shadow-none lg:bg-transparent animate-slide-in-left lg:animate-none overflow-hidden">
+        <Card className="h-full rounded-none lg:rounded-xl sidebar-glass border-border/50 overflow-hidden">
           <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-card/50 flex-shrink-0">
             <CardTitle className="flex items-center gap-3 font-poppins">
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -99,25 +99,25 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
               {selectedTag && (
                 <div className="animate-fade-in flex-shrink-0">
                   <p className="text-sm font-medium text-muted-foreground mb-3">Active Filter:</p>
-                  <Badge variant="default" className="text-sm py-1.5 px-3 bg-primary text-primary-foreground">
+                  <Badge variant="default" className="text-sm py-1.5 px-3 bg-primary text-primary-foreground max-w-full truncate">
                     {selectedTag}
                   </Badge>
                 </div>
               )}
 
               {/* Tags list */}
-              <div className="flex-1 overflow-hidden flex flex-col">
+              <div className="flex-1 flex flex-col overflow-hidden min-h-0">
                 <p className="text-sm font-medium text-foreground mb-4 flex-shrink-0">Available Tags:</p>
                 {loading ? (
-                  <div className="space-y-3 flex-1">
+                  <div className="space-y-3 flex-1 overflow-hidden">
                     {[...Array(10)].map((_, i) => (
                       <div key={i} className="h-10 skeleton-shimmer rounded-lg" />
                     ))}
                   </div>
                 ) : (
-                  <div className="flex-1 overflow-hidden">
+                  <div className="flex-1 overflow-hidden min-h-0">
                     <ScrollArea className="h-full">
-                      <div className="space-y-2 pr-4">
+                      <div className="space-y-2 pr-2">
                         {tags.map((tag, index) => (
                           <Button
                             key={tag}
@@ -125,7 +125,7 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
                             variant={selectedTag === tag ? "default" : "ghost"}
                             size="sm"
                             className={`
-                              w-full justify-start text-left h-10 px-4 transition-all duration-200 animate-fade-in
+                              w-full justify-start text-left h-10 px-4 transition-all duration-200 animate-fade-in min-w-0
                               ${selectedTag === tag 
                                 ? 'bg-primary text-primary-foreground shadow-custom-sm' 
                                 : 'hover:bg-accent hover:text-accent-foreground interactive-element'
@@ -133,9 +133,9 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
                             `}
                             style={{ animationDelay: `${index * 20}ms` }}
                           >
-                            <span className="truncate">{tag}</span>
+                            <span className="truncate flex-1 text-left">{tag}</span>
                             {selectedTag === tag && (
-                              <div className="ml-auto w-2 h-2 rounded-full bg-primary-foreground flex-shrink-0" />
+                              <div className="ml-2 w-2 h-2 rounded-full bg-primary-foreground flex-shrink-0" />
                             )}
                           </Button>
                         ))}
