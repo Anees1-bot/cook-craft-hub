@@ -134,7 +134,7 @@ const Recipes = () => {
     <div className="min-h-screen bg-gradient-hero">
       <div className="flex w-full">
         {/* Desktop Sidebar */}
-        <div className="hidden lg:block w-80 flex-shrink-0">
+        <div className="hidden lg:block w-80 flex-shrink-0 mr-6">
           <div className="sticky top-0 h-screen overflow-y-auto p-6">
             <RecipeSidebar
               selectedTag={selectedTag}
