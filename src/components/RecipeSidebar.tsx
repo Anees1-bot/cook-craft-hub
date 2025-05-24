@@ -59,7 +59,7 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
       {/* Sidebar */}
       <div className="fixed left-0 top-0 h-full w-80 bg-card/95 backdrop-blur-md shadow-custom-xl z-50 lg:relative lg:shadow-none lg:bg-transparent animate-slide-in-left lg:animate-none">
         <Card className="h-full rounded-none lg:rounded-xl sidebar-glass border-border/50">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-card/50">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 bg-card/50 flex-shrink-0">
             <CardTitle className="flex items-center gap-3 font-poppins">
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Filter className="w-4 h-4 text-primary" />
@@ -77,11 +77,11 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
             </Button>
           </CardHeader>
           
-          <CardContent className="p-6 h-full overflow-hidden flex flex-col">
-            <div className="space-y-6 flex-1 overflow-hidden">
+          <CardContent className="p-0 h-full flex flex-col overflow-hidden">
+            <div className="p-6 space-y-6 flex-1 flex flex-col overflow-hidden">
               {/* Clear filter button */}
               {selectedTag && (
-                <>
+                <div className="flex-shrink-0">
                   <Button
                     onClick={() => onTagSelect(null)}
                     variant="outline"
@@ -91,13 +91,13 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
                     <X className="w-4 h-4 mr-2" />
                     Clear Filter
                   </Button>
-                  <Separator className="bg-border/50" />
-                </>
+                  <Separator className="bg-border/50 mt-4" />
+                </div>
               )}
 
               {/* Selected tag */}
               {selectedTag && (
-                <div className="animate-fade-in">
+                <div className="animate-fade-in flex-shrink-0">
                   <p className="text-sm font-medium text-muted-foreground mb-3">Active Filter:</p>
                   <Badge variant="default" className="text-sm py-1.5 px-3 bg-primary text-primary-foreground">
                     {selectedTag}
@@ -106,40 +106,42 @@ const RecipeSidebar = ({ selectedTag, onTagSelect, isOpen, onToggle }: RecipeSid
               )}
 
               {/* Tags list */}
-              <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-medium text-foreground mb-4">Available Tags:</p>
+              <div className="flex-1 overflow-hidden flex flex-col">
+                <p className="text-sm font-medium text-foreground mb-4 flex-shrink-0">Available Tags:</p>
                 {loading ? (
-                  <div className="space-y-3">
+                  <div className="space-y-3 flex-1">
                     {[...Array(10)].map((_, i) => (
                       <div key={i} className="h-10 skeleton-shimmer rounded-lg" />
                     ))}
                   </div>
                 ) : (
-                  <ScrollArea className="h-full pr-4">
-                    <div className="space-y-2">
-                      {tags.map((tag, index) => (
-                        <Button
-                          key={tag}
-                          onClick={() => onTagSelect(tag === selectedTag ? null : tag)}
-                          variant={selectedTag === tag ? "default" : "ghost"}
-                          size="sm"
-                          className={`
-                            w-full justify-start text-left h-10 px-4 transition-all duration-200 animate-fade-in
-                            ${selectedTag === tag 
-                              ? 'bg-primary text-primary-foreground shadow-custom-sm' 
-                              : 'hover:bg-accent hover:text-accent-foreground interactive-element'
-                            }
-                          `}
-                          style={{ animationDelay: `${index * 20}ms` }}
-                        >
-                          <span className="truncate">{tag}</span>
-                          {selectedTag === tag && (
-                            <div className="ml-auto w-2 h-2 rounded-full bg-primary-foreground" />
-                          )}
-                        </Button>
-                      ))}
-                    </div>
-                  </ScrollArea>
+                  <div className="flex-1 overflow-hidden">
+                    <ScrollArea className="h-full">
+                      <div className="space-y-2 pr-4">
+                        {tags.map((tag, index) => (
+                          <Button
+                            key={tag}
+                            onClick={() => onTagSelect(tag === selectedTag ? null : tag)}
+                            variant={selectedTag === tag ? "default" : "ghost"}
+                            size="sm"
+                            className={`
+                              w-full justify-start text-left h-10 px-4 transition-all duration-200 animate-fade-in
+                              ${selectedTag === tag 
+                                ? 'bg-primary text-primary-foreground shadow-custom-sm' 
+                                : 'hover:bg-accent hover:text-accent-foreground interactive-element'
+                              }
+                            `}
+                            style={{ animationDelay: `${index * 20}ms` }}
+                          >
+                            <span className="truncate">{tag}</span>
+                            {selectedTag === tag && (
+                              <div className="ml-auto w-2 h-2 rounded-full bg-primary-foreground flex-shrink-0" />
+                            )}
+                          </Button>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </div>
                 )}
               </div>
             </div>
